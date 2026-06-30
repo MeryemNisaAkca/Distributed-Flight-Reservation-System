@@ -1,0 +1,48 @@
+.payment-box { 
+    max-width: 500px; 
+    margin: 100px auto; 
+    background: white; 
+    padding: 40px; 
+    border-radius: 12px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+    text-align: center; 
+}
+
+.amount { 
+    font-size: 32px; 
+    color: #c8102e; 
+    font-weight: bold; 
+    margin: 20px 0; 
+}
+
+.input-group { 
+    margin-bottom: 15px; 
+    text-align: left; 
+}
+
+.input-group label { 
+    display: block; 
+    margin-bottom: 5px; 
+    font-weight: bold; 
+}
+
+.input-group input { 
+    width: 100%; 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 6px; 
+}
+
+.btn-pay { 
+    background: #c8102e; 
+    color: white; 
+    padding: 15px; 
+    width: 100%; 
+    border: none; 
+    border-radius: 8px; 
+    font-weight: bold; 
+    cursor: pointer; 
+}
+
+
+

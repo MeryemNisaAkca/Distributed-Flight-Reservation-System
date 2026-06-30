@@ -1,0 +1,160 @@
+/* --- style_boarding.css --- */
+
+body {
+    background-color: #f4f7f6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.page-title {
+    text-align: center;
+    color: #232b38;
+    margin-bottom: 30px;
+}
+
+
+.boarding-pass {
+    display: flex;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    position: relative;
+}
+
+
+.pass-left {
+    flex: 2.5;
+    padding: 20px;
+    border-right: 2px dashed #ccc; 
+    position: relative;
+}
+
+
+.pass-right {
+    flex: 1;
+    background: #232b38;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+}
+
+.pass-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #c8102e;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.airline-name {
+    font-weight: 800;
+    color: #c8102e;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.class-type {
+    font-weight: bold;
+    color: #232b38;
+    background: #eef2f6;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+
+.flight-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.info-group label {
+    display: block;
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.info-group span {
+    display: block;
+    font-weight: 700;
+    color: #333;
+    font-size: 16px;
+}
+
+
+.route {
+    margin: 20px 0;
+    font-size: 32px;
+    color: #232b38;
+    font-weight: 300;
+}
+.route b { font-weight: 900; }
+
+
+.pass-right .seat-big {
+    font-size: 42px;
+    font-weight: 800;
+    margin: 10px 0;
+}
+.pass-right label {
+    color: #aaa;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+.pass-right span {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* QR Code Simulation */
+.qr-code {
+    margin-top: auto;
+    width: 80px;
+    height: 80px;
+    background: white;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+@media print {
+    body { background: white; -webkit-print-color-adjust: exact; }
+    .no-print { display: none !important; } 
+    .boarding-pass { box-shadow: none; border: 1px solid #000; break-inside: avoid; }
+    .container { width: 100%; max-width: 100%; margin: 0; }
+}
+
+
+.actions {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+.btn-print {
+    background: #232b38; color: white; border: none; padding: 12px 25px;
+    border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 16px;
+    display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-home {
+    background: transparent; color: #555; border: 2px solid #ddd; padding: 10px 20px;
+    border-radius: 50px; font-weight: bold; cursor: pointer; text-decoration: none;
+    margin-left: 10px;
+}

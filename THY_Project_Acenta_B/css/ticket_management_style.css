@@ -1,0 +1,113 @@
+body {
+    background-color: #f4f7f6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('assets/sky_bg.jpg');
+    background-size: cover;
+}
+
+.login-card {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #232b38;
+    margin-bottom: 10px;
+    display: block;
+    text-decoration: none;
+}
+
+.logo i { 
+    color: #c8102e; 
+}
+
+h2 { 
+    margin-bottom: 20px; 
+    color: #555; 
+    font-weight: 400; 
+}
+
+.form-group { 
+    margin-bottom: 20px; 
+    text-align: left; 
+}
+
+label { 
+    display: block; 
+    margin-bottom: 5px; 
+    color: #666; 
+    font-size: 14px; 
+    font-weight: bold; 
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box; 
+    transition: 0.3s;
+}
+
+input[type="text"]:focus {
+    border-color: #c8102e;
+    outline: none;
+}
+
+.btn-submit {
+    background-color: #c8102e;
+    color: white;
+    padding: 12px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-submit:hover { 
+    background-color: #a00c24; 
+}
+
+.error-msg {
+    background-color: #ffe6e6;
+    color: #c8102e;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #c8102e;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.back-link:hover {
+    background: #a00c24;
+}
+
+
+

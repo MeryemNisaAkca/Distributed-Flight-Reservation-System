@@ -1,0 +1,91 @@
+.admin-container { 
+    max-width: 1100px; 
+    margin: 40px auto; 
+}
+
+.admin-card { 
+    background: white; 
+    border-radius: 12px; 
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08); 
+    padding: 20px; 
+    margin-bottom: 20px; 
+}
+
+.admin-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 10px; 
+}
+
+.status-pill { 
+    padding: 4px 10px; 
+    border-radius: 20px; 
+    font-size: 12px; 
+    font-weight: bold; 
+}
+
+.status-Planned { 
+    background: #e2e3ff; 
+    color: #3b3f9f; 
+}
+
+.status-Delayed { 
+    background: #fff3cd; 
+    color: #856404; 
+}
+
+.status-Cancelled { 
+    background: #f8d7da; 
+    color: #721c24; 
+}
+
+.status-Land { 
+    background: #d4edda; 
+    color: #155724; 
+}
+
+.admin-grid { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 10px; 
+    font-size: 13px; 
+}
+
+.admin-grid label { 
+    font-size: 11px; 
+    text-transform: uppercase; 
+    color: #888; 
+    display: block; 
+}
+
+.admin-grid span { 
+    font-weight: bold; 
+}
+
+.status-form { 
+    margin-top: 15px; 
+    display: flex; 
+    justify-content: flex-end; 
+    align-items: center; 
+    gap: 10px; 
+}
+
+.status-form select { 
+    padding: 6px 8px; 
+    border-radius: 4px; 
+    border: 1px solid #ccc; 
+}
+
+.btn-update { 
+    background: #c8102e; 
+    color: #fff; 
+    border: none; 
+    padding: 7px 14px; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    font-size: 13px; 
+}
+
+
+

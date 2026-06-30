@@ -1,0 +1,82 @@
+.results-container { 
+    max-width: 1000px; 
+    margin: 50px auto; 
+    padding: 20px; 
+}
+
+.flight-card {
+    background: white; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 25px; 
+    margin-bottom: 20px; 
+    display: flex; 
+    justify-content: space-between;
+    align-items: center; 
+    transition: transform 0.2s;
+}
+
+.flight-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15); 
+}
+
+.flight-info { 
+    flex: 1; 
+}
+
+.flight-time { 
+    font-size: 24px; 
+    font-weight: bold; 
+    color: #232b38; 
+}
+
+.flight-route { 
+    font-size: 14px; 
+    color: #666; 
+    margin-top: 5px; 
+}
+
+.price-tag { 
+    font-size: 28px; 
+    font-weight: bold; 
+    color: #c8102e; 
+    display: block; 
+}
+
+.btn-select {
+    background-color: #c8102e; 
+    color: white; 
+    padding: 10px 20px; 
+    text-decoration: none;
+    border-radius: 5px; 
+    font-weight: bold; 
+    margin-top: 10px; 
+    display: inline-block;
+}
+
+.remaining-seats {
+    color: #e67e22; 
+    font-size: 12px; 
+    font-weight: bold; 
+    margin-top: 5px;
+}
+
+.no-flights { 
+    text-align: center; 
+    background: white; 
+    padding: 40px; 
+    border-radius: 8px; 
+    color: #666; 
+}
+
+#sortSelect { 
+    min-width: 200px; 
+}
+
+#sortSelect:hover { 
+    border-color: #c8102e; 
+}
+
+
+

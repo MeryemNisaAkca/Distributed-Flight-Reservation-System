@@ -1,0 +1,55 @@
+.cancel-container { 
+    max-width: 600px; 
+    margin: 50px auto; 
+}
+
+.cancel-card { 
+    background: white; 
+    border-radius: 12px; 
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1); 
+    padding: 30px; 
+    text-align: center; 
+}
+
+.warning-box { 
+    background: #fff3cd; 
+    border: 2px solid #ffc107; 
+    border-radius: 8px; 
+    padding: 20px; 
+    margin: 20px 0; 
+}
+
+.btn-cancel { 
+    background: #dc3545; 
+    color: white; 
+    padding: 12px 30px; 
+    border: none; 
+    border-radius: 6px; 
+    font-size: 16px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    margin: 10px; 
+}
+
+.btn-back { 
+    background: #c8102e; 
+    color: white; 
+    padding: 10px 20px; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    font-size: 16px; 
+    font-weight: bold; 
+    display: inline-block; 
+    margin: 10px; 
+}
+
+input[type="radio"] { 
+    cursor: pointer; 
+}
+
+label { 
+    text-align: left; 
+}
+
+
+

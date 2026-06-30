@@ -1,0 +1,151 @@
+.container { 
+    max-width: 1000px; 
+    margin: 40px auto; 
+}
+
+.section-title { 
+    font-size: 24px; 
+    color: #232b38; 
+    margin: 30px 0 15px 0; 
+    border-bottom: 2px solid #ddd; 
+    padding-bottom: 10px; 
+}
+
+/* Uçuş Kartı Tasarımı */
+.flight-history-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-left: 5px solid #232b38;
+    transition: transform 0.2s;
+}
+
+.flight-history-card:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1); 
+}
+
+.flight-history-card.past { 
+    border-left-color: #999; 
+    opacity: 0.8; 
+    background: #f9f9f9; 
+}
+
+.fh-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 15px; 
+}
+
+.fh-info { 
+    flex: 1; 
+}
+
+.fh-route { 
+    font-size: 20px; 
+    font-weight: bold; 
+    color: #333; 
+    margin-bottom: 8px; 
+}
+
+.fh-date { 
+    color: #666; 
+    font-size: 14px; 
+    margin-bottom: 8px; 
+}
+
+.fh-pnr { 
+    background: #eef2f6; 
+    padding: 5px 10px; 
+    border-radius: 4px; 
+    font-weight: bold; 
+    color: #232b38; 
+    font-size: 13px; 
+    display: inline-block; 
+    margin-right: 10px; 
+}
+
+.fh-passengers { 
+    margin-top: 15px; 
+    padding-top: 15px; 
+    border-top: 1px solid #eee; 
+}
+
+.passenger-item { 
+    background: #f8f9fa; 
+    padding: 10px; 
+    border-radius: 6px; 
+    margin-bottom: 8px; 
+}
+
+.passenger-name { 
+    font-weight: bold; 
+    color: #333; 
+}
+
+.passenger-details { 
+    font-size: 12px; 
+    color: #666; 
+    margin-top: 5px; 
+}
+
+.passenger-details span { 
+    margin-right: 10px; 
+}
+
+.badge { 
+    display: inline-block; 
+    padding: 2px 8px; 
+    border-radius: 12px; 
+    font-size: 11px; 
+    font-weight: bold; 
+    margin-left: 5px; 
+}
+
+.badge-seat { 
+    background: #e3f2fd; 
+    color: #1976d2; 
+}
+
+.badge-meal { 
+    background: #fff3e0; 
+    color: #f57c00; 
+}
+
+.badge-baggage { 
+    background: #f3e5f5; 
+    color: #7b1fa2; 
+}
+
+.badge-baby { 
+    background: #ffebee; 
+    color: #c62828; 
+}
+
+.btn-manage {
+    background: #c8102e; 
+    color: white; 
+    padding: 10px 20px; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    font-weight: bold;
+}
+
+.btn-view { 
+    background: #232b38; 
+} /* Geçmiş uçuşlar için */
+
+.btn-cancel-passenger { 
+    transition: all 0.2s; 
+}
+
+.btn-cancel-passenger:hover { 
+    background: #c82333 !important; 
+    transform: scale(1.05); 
+}
+
+
+

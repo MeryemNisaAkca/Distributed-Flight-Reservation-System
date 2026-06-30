@@ -1,0 +1,59 @@
+.status-container { 
+    max-width: 800px; 
+    margin: 50px auto; 
+    padding: 20px; 
+}
+
+.status-card {
+    background: white; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 30px; 
+    text-align: center;
+}
+
+.status-badge {
+    display: inline-block; 
+    padding: 10px 20px; 
+    border-radius: 20px;
+    font-weight: bold; 
+    color: white; 
+    margin-top: 15px;
+}
+
+.status-active { 
+    background-color: #28a745; 
+}
+
+.status-delayed { 
+    background-color: #ffc107; 
+    color: #333; 
+}
+
+.status-cancelled { 
+    background-color: #c8102e; 
+}
+
+.navbar { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    background: #232b38; 
+    padding: 15px 30px; 
+    color: white; 
+}
+
+.navbar-left { 
+    display: flex; 
+    align-items: center; 
+    gap: 20px; 
+}
+
+.navbar-right { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+}
+
+
+
