@@ -14,28 +14,27 @@ $passengers = $input['passengers'] ?? [];
 
 $successCount = 0; $errorCount = 0; $lastMessage = "";
 
+// ==========================================
+// 1. TUR: ÖNCE SADECE YETİŞKİNLERİ CHECK-IN YAP
+// ==========================================
 foreach ($seats as $ticketID => $seatNo) {
-    
-    if (!empty($companions[$ticketID])) {
-        $compID = (int)$companions[$ticketID];
-        $stmt = sqlsrv_query($conn, "SELECT SeatNo FROM Tickets_Table WHERE TicketID = ?", [$compID]);
-        if ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) { $seatNo = $row['SeatNo']; }
+    $isBaby = false;
+    foreach ($passengers as $p) {
+        if ($p['TicketID'] == $ticketID && strtolower($p['AgeType']) === 'baby') {
+            $isBaby = true; break;
+        }
     }
+    
+    // Eğer bebekse, bu turda atla (2. tura bırak)
+    if ($isBaby) continue; 
 
     $mealID = !empty($meals[$ticketID]) ? (int)$meals[$ticketID] : null;
     $baggageID = !empty($baggages[$ticketID]) ? (int)$baggages[$ticketID] : null;
 
-    
-    foreach ($passengers as $p) {
-        if ($p['TicketID'] == $ticketID && strtolower($p['AgeType']) === 'baby') {
-            $mealID = null; $baggageID = null; break;
-        }
-    }
-
     $paramTicketID = (int)$ticketID;
     $paramSeatNo = (!empty($seatNo) && $seatNo !== 'COMPANION') ? $seatNo : null;
 
-    
+    // Yetişkinler Stored Procedure (Kural Motoru) ile kaydedilir
     $sqlProc = "{CALL UP_CheckIn(?, ?, ?, ?)}";
     $paramsProc = array($paramTicketID, $paramSeatNo, $mealID, $baggageID);
     $stmtProc = sqlsrv_query($conn, $sqlProc, $paramsProc);
@@ -52,6 +51,45 @@ foreach ($seats as $ticketID => $seatNo) {
             $errorCount++;
             $lastMessage = $row['Message'] ?? 'Check-in başarısız.';
         }
+    }
+}
+
+// ==========================================
+// 2. TUR: ŞİMDİ SADECE BEBEKLERİ İŞLE
+// ==========================================
+foreach ($seats as $ticketID => $seatNo) {
+    $isBaby = false;
+    foreach ($passengers as $p) {
+        if ($p['TicketID'] == $ticketID && strtolower($p['AgeType']) === 'baby') {
+            $isBaby = true; break;
+        }
+    }
+    
+    // Eğer yetişkinse atla (Zaten 1. turda hallettik)
+    if (!$isBaby) continue; 
+
+    $compID = !empty($companions[$ticketID]) ? (int)$companions[$ticketID] : null;
+    $babySeat = null;
+
+    // Ebeveynin 1. Turda kesinleşen koltuğunu bul
+    if ($compID) {
+        $stmt = sqlsrv_query($conn, "SELECT SeatNo FROM Tickets_Table WHERE TicketID = ?", [$compID]);
+        if ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) { 
+            $babySeat = $row['SeatNo']; 
+        }
+    }
+
+    // BEBEK HACK: Stored Procedure'ün "Dolu Koltuk" uyarısını atlatmak için,
+    // Bebeği doğrudan SQL UPDATE ile ebeveynin kucağına kaydediyoruz!
+    $sqlBaby = "UPDATE Tickets_Table SET CheckInStatus = 1, SeatNo = ? WHERE TicketID = ?";
+    $stmtBaby = sqlsrv_query($conn, $sqlBaby, array($babySeat, $ticketID));
+
+    if ($stmtBaby) {
+        $successCount++;
+    } else {
+        $errorCount++;
+        $err = sqlsrv_errors();
+        $lastMessage = $err[0]['message'] ?? 'Bebek check-in hatası.';
     }
 }
 

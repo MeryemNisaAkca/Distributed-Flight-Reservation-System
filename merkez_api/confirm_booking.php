@@ -97,6 +97,10 @@ try {
     if ($passengerCount == 0) throw new Exception("Yolcu bilgisi bulunamadı.");
 
     foreach ($data['passengers'] as $p) {
+        
+        // ÇÖZÜM: JSON paketinden gelen doğru yaşı değişkene al (bulamazsa son çare Adult yap)
+        $ageType = $p['AgeType'] ?? 'Adult';
+
         foreach ($reservationIDs as $idx => $rID) {
             
             $calculatedPrice = $flightPrices[$idx] / $passengerCount;
@@ -105,7 +109,8 @@ try {
             $sqlTicket = "INSERT INTO Tickets_Table (ReservationID, FlightID, CabinType, AgeType, TicketPrice, CheckInStatus, PassengerName, PassengerSurname) 
                           VALUES (?, ?, ?, ?, ?, 0, ?, ?)";
             
-            $paramsTicket = array($rID, $flightIDs[$idx], $flightDetails['cabin_class'], 'Adult', $ticketPrice, strtoupper($p['name']), strtoupper($p['surname']));
+            // ÇÖZÜM: Sabit 'Adult' yazısı yerine yukarıda yakaladığımız $ageType değişkenini koyduk
+            $paramsTicket = array($rID, $flightIDs[$idx], $flightDetails['cabin_class'], $ageType, $ticketPrice, strtoupper($p['name']), strtoupper($p['surname']));
             
             $stmtTicket = sqlsrv_query($conn, $sqlTicket, $paramsTicket);
             if ($stmtTicket === false) throw new Exception("Bilet INSERT Hatası: " . getSqlErrors());

@@ -8,6 +8,8 @@ $userCompanyID = $_SESSION['user_company_id'] ?? 0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'cancel_ticket') {
     $ticketID = (int)$_POST['ticket_id'];
+    $pnr = $_POST['pnr'] ?? '';
+    $surname = $_POST['surname'] ?? '';
     
     // Güvenlik Duvarı: Bu bilet GERÇEKTEN bu acentanın sattığı bir bilet mi?
     $checkSql = "SELECT T.TicketID FROM Tickets_Table T 
@@ -16,15 +18,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $checkStmt = sqlsrv_query($conn, $checkSql, array($ticketID, $_SESSION['user_company_id']));
     
     if (sqlsrv_has_rows($checkStmt)) {
-        // Evet, bilet bu acentanın. İptal edebilir.
-        $cancelSql = "UPDATE Tickets_Table SET TicketStatus = 'Cancelled' WHERE TicketID = ?";
-        sqlsrv_query($conn, $cancelSql, array($ticketID));
-        $_SESSION['success_message'] = "<div style='color:green; margin-bottom:15px;'><i class='fas fa-check-circle'></i> Ticket #$ticketID has been successfully cancelled.</div>";
+        
+        // DOĞRUDAN SQL UPDATE YERİNE MERKEZ API'YE İSTEK ATIYORUZ (Distributed Mimari Kuralı)
+        $cancelPayload = [
+            "pnr" => $pnr,
+            "ticket_id" => $ticketID,
+            "user_id" => null, // Şirket iptal ettiği için spesifik bir müşteri oturumu aramıyoruz
+            "surname" => $surname,
+            "agency" => AGENCY_CODE,
+            "baby_action" => "cancel_baby", // Eğer bebek varsa acenta otomatik iptal etsin
+            "new_companion_id" => ""
+        ];
+
+        $postUrl = MERKEZ_URL . "/process_cancel.php"; // Merkez bağlantısı
+        $ch2 = curl_init($postUrl);
+        curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch2, CURLOPT_POST, true);
+        curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($cancelPayload));
+        curl_setopt($ch2, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        
+        $apiCevap = curl_exec($ch2);
+        $api_ulasildi = !curl_errno($ch2);
+        curl_close($ch2);
+
+        $result = json_decode($apiCevap, true);
+
+        // API'den Gelen Yanıta Göre Kullanıcıya Mesaj Ver
+        if ($api_ulasildi && isset($result['status']) && $result['status'] === 'success') {
+            $_SESSION['success_message'] = "<div style='color:green; margin-bottom:15px;'><i class='fas fa-check-circle'></i> Ticket #$ticketID has been successfully cancelled via Central API. Seat is released.</div>";
+        } else {
+            $hataDetay = $result['message'] ?? 'Central API rejected the action.';
+            $_SESSION['error_message'] = "<div style='color:red; margin-bottom:15px;'><i class='fas fa-ban'></i> Cancellation failed: " . htmlspecialchars($hataDetay) . "</div>";
+        }
+
     } else {
         $_SESSION['error_message'] = "<div style='color:red; margin-bottom:15px;'><i class='fas fa-ban'></i> Unauthorized action! You can only cancel tickets sold by your agency.</div>";
     }
     
-    // PHP header() yerine JavaScript yönlendirmesi
+    // İşlem bitince JavaScript ile sayfayı yenile
     echo "<script>window.location.href = 'company_owner_dashboard.php?tab=users_tickets';</script>";
     exit();
 }
@@ -336,6 +367,12 @@ $checkInRate = ($stmtCheckInRate && $row = sqlsrv_fetch_array($stmtCheckInRate, 
                                             <form method="POST" action="company_owner_dashboard.php?tab=users_tickets" style="margin:0;" onsubmit="return confirm('Cancel this ticket?');">
                                                 <input type="hidden" name="action" value="cancel_ticket">
                                                 <input type="hidden" name="ticket_id" value="<?php echo $t['TicketID']; ?>">
+                                                
+                                                <!-- API İÇİN YENİ EKLENEN GİZLİ ALANLAR -->
+                                                <input type="hidden" name="pnr" value="<?php echo htmlspecialchars($pnr); ?>">
+                                                <input type="hidden" name="surname" value="<?php echo htmlspecialchars($t['PassengerSurname']); ?>">
+                                                <!-- --------------------------------- -->
+
                                                 <button type="submit" style="background: #dc3545; color: white; border: none; padding: 3px 8px; border-radius: 12px; font-size: 10px; cursor: pointer;">
                                                     <i class="fas fa-times"></i> Cancel
                                                 </button>

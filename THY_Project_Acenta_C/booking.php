@@ -40,11 +40,12 @@ if (!$isRoundTrip && $flightID > 0) {
 }
 
 // Get Passenger Counts
-$adults = isset($_GET['adults']) ? (int)$_GET['adults'] : 1;
-$children = isset($_GET['children']) ? (int)$_GET['children'] : 0;
-$teens = isset($_GET['teens']) ? (int)$_GET['teens'] : 0;
-$old = isset($_GET['old']) ? (int)$_GET['old'] : 0;
-$babies = isset($_GET['babies']) ? (int)$_GET['babies'] : 0;
+// YENİ KOD (Hem eskiyi hem de index.php'den gelen count kelimelerini destekler):
+$adults = isset($_GET['adult_count']) ? (int)$_GET['adult_count'] : (isset($_GET['adults']) ? (int)$_GET['adults'] : 1);
+$children = isset($_GET['child_count']) ? (int)$_GET['child_count'] : (isset($_GET['children']) ? (int)$_GET['children'] : 0);
+$teens = isset($_GET['teen_count']) ? (int)$_GET['teen_count'] : (isset($_GET['teens']) ? (int)$_GET['teens'] : 0);
+$old = isset($_GET['old_count']) ? (int)$_GET['old_count'] : (isset($_GET['old']) ? (int)$_GET['old'] : 0);
+$babies = isset($_GET['baby_count']) ? (int)$_GET['baby_count'] : (isset($_GET['babies']) ? (int)$_GET['babies'] : 0);
 
 // Security Check: Ensure valid flight IDs are present. If not, redirect to home.
 if (!$isRoundTrip && $outboundFlightID == 0) {
