@@ -1,75 +1,133 @@
 # ✈️ Distributed Flight Reservation System (BiletArena)
 *Scroll down for the Turkish version. / Türkçe versiyon için aşağı kaydırın.*
 
-A highly secure, distributed web application built to simulate a real-world airline reservation network. This project features a Central API communicating with multiple independent agency nodes (Agency A, B, and C) to manage flights, passenger ticketing, and complex infant-companion cancellation policies.
-
-Beyond core software engineering, this project is architected with a strong emphasis on **Application Security (AppSec)** and **Cloud Infrastructure (DevSecOps)**, utilizing AWS and Cloudflare to ensure enterprise-grade resilience.
+A highly secure, distributed web application built to simulate a real-world airline reservation network. This project features a Central API communicating with multiple independent agency nodes, designed with a strong emphasis on Application Security (AppSec) and Cloud Infrastructure.
 
 ---
 
-## 🏗️ System Architecture
-The platform operates on a distributed network model:
-*   **Central API (`merkez_api`):** The core engine that processes cross-agency synchronizations, inventory management, and database transactions via MS SQL Server.
-*   **Agency Nodes (`Acenta_A`, `Acenta_B`, `Acenta_C`):** Independent front-end and backend nodes that securely communicate with the Central API using cURL and JSON payloads.
-*   **Cloud Infrastructure:** Hosted on **AWS EC2 (Ubuntu Linux)**, securely sitting behind a **Cloudflare Reverse Proxy** for SSL/TLS encryption and DDoS mitigation.
+## 📑 Requirement Specification
+
+### Purpose:
+The aviation and travel industry requires robust, seamless, and secure platforms to handle complex daily operations. Traditional localized systems face scalability and synchronization issues. The purpose of this project is to build a distributed, browser-based reservation system that can process, retrieve, and analyze ticketing information across multiple separate nodes simultaneously. Furthermore, this system is designed to be highly resistant to modern cyber threats, maintaining infinite logs and operating securely on a distributed client-server computing technology.
+
+### Project Scope:
+The project’s focus is the development of a highly scalable Travel Management System. The main deliverables of the project are:
+*   A Central API engine for database synchronization.
+*   Three independent Agency Nodes (Acenta A, B, and C).
+*   Integration of real-time cloud security monitoring.
+*   Detailed security implementations for data integrity.
 
 ---
 
-## 🛡️ Security & Incident Response (AppSec)
-Security is treated as a first-class citizen in this repository. The system includes custom-built defense mechanisms and real-time monitoring sensors:
+## 🔭 Overall Description
 
-*   **AWS CloudWatch SOC Integration:** Critical security events are instantly written to a local `security_audit.log` and forwarded to AWS CloudWatch via an internal agent, creating a real-time Security Operations Center (SOC) dashboard.
-*   **Anti-Brute-Force & Account Lockout:** Implemented a secure login mechanism that locks user accounts for 15 minutes after 5 consecutive failed attempts. Handled Time Drift (UTC vs UTC+3) between the application layer and the database seamlessly.
-*   **Cross-Site Scripting (XSS) Sensors:** Beyond standard `filter_input` sanitization, active Regex-based sensors detect malicious HTML/JavaScript payloads (e.g., `<script>`) in user inputs and alert the AWS CloudWatch dashboard.
-*   **CSRF Token Tampering Prevention:** State-changing requests (like ticket cancellations) are protected by cryptographic CSRF tokens (`random_bytes`). Logic flaws (GET-based state changes) were eliminated and restricted to secure POST methods.
-*   **Database Security:** 100% prevention of SQL Injection through parameterized queries (`sqlsrv_query`).
+### Product Perspective:
+The system is targeted towards Travelers seeking a secure booking experience, Travel Agencies needing synchronized flight inventories, and System Administrators monitoring network health and security.
+
+### Project Features:
+*   **Distributed Architecture:** Independent nodes communicating with a Central API via cURL and JSON.
+*   **Real-Time Security Monitoring (SOC):** Critical security events are written to local logs and instantly forwarded to **AWS CloudWatch**.
+*   **Complex Ticketing Logic:** Handles intricate business rules, such as preventing infant passengers from booking without an adult companion.
+*   **Database Optimization:** B-Tree indexing on high-traffic columns in Microsoft SQL Server to ensure logarithmic search complexities.
+
+### Operating Environment:
+The product is hosted on a cloud environment (**AWS EC2 Ubuntu Linux**) and sits behind a **Cloudflare Reverse Proxy**. It is compatible with all modern web browsers.
 
 ---
 
-## 💻 Technologies Used
-*   **Backend:** PHP 8.x, cURL
-*   **Frontend:** HTML5, CSS3, JavaScript
-*   **Database:** MS SQL Server (with B-Tree Indexing)
-*   **Cloud & DevOps:** AWS EC2, AWS IAM, AWS CloudWatch, Ubuntu Linux
+## ⚙️ System Features
+
+### Admin / System Architect:
+The Admin is responsible for observing and maintaining the whole system and its security posture. The functionalities include:
+*   Monitoring the AWS CloudWatch SOC dashboard for potential threats.
+*   Managing the MS SQL Database and indexing structures.
+*   Observing intrusion attempts (e.g., Brute-Force, XSS).
+
+### Travel Agency Node:
+Independent platforms that interact with the central database.
+*   Fetch available flights dynamically via Central API.
+*   Process ticket sales and synchronize inventory securely.
+
+### Traveler (Passenger):
+Each traveler has an individual account protected by strict security protocols. The options given to each registered Traveler are:
+*   **Secure Registration:** Inputs are sanitized and monitored by Regex-based **XSS (Cross-Site Scripting) Sensors**.
+*   **Login:** Protected by an **Anti-Brute-Force mechanism** that locks the account for 15 minutes after 5 failed attempts (handling UTC Time Drift).
+*   **Search & Buy Ticket:** Browse dynamic routes and purchase tickets.
+*   **Cancel Ticket:** State-changing requests are protected by cryptographic **CSRF Tokens** to prevent request forgery.
+
+---
+
+## 💻 Interfaces & Constraints
+
+*   **Database:** MS SQL Server
+*   **Development Tools:** Visual Studio Code, Cursor AI, Git/GitHub
+*   **Cloud & DevOps:** AWS EC2, AWS IAM, AWS CloudWatch, Ubuntu Linux, Bash Scripting
 *   **Network Security:** Cloudflare WAF, Nmap (Reconnaissance Defense)
 
-*Dedicated to delivering industry-standard solutions by bridging modern cloud infrastructures with advanced AppSec practices.
 ---
 ---
 
 # 🇹🇷 Dağıtık Uçuş Rezervasyon Sistemi (BiletArena)
 
-Gerçek dünya havayolu rezervasyon ağlarını simüle etmek amacıyla geliştirilmiş, yüksek güvenlikli ve dağıtık mimariye sahip bir web uygulamasıdır. Bu proje, uçuşları, biletlemeyi ve karmaşık bebek-yetişkin yolcu iptal politikalarını yönetmek için çoklu bağımsız acenta düğümleriyle (Acenta A, B ve C) iletişim kuran bir Merkez API içerir.
-
-Temel yazılım mühendisliğinin ötesinde bu proje; kurumsal düzeyde dayanıklılık sağlamak amacıyla AWS ve Cloudflare kullanılarak **Uygulama Güvenliği (AppSec)** ve **Bulut Altyapısı (DevSecOps)** odağında tasarlanmıştır.
+Gerçek dünya havayolu rezervasyon ağlarını simüle etmek amacıyla geliştirilmiş, yüksek güvenlikli ve dağıtık mimariye sahip bir web uygulamasıdır. Bu proje, Uygulama Güvenliği (AppSec) ve Bulut Altyapısına güçlü bir vurgu yapılarak tasarlanmış olup, çoklu bağımsız acenta düğümleriyle iletişim kuran bir Merkez API içerir.
 
 ---
 
-## 🏗️ Sistem Mimarisi
-Platform dağıtık bir ağ modeli üzerinde çalışır:
-*   **Merkez API (`merkez_api`):** Acentalar arası senkronizasyonları, envanter yönetimini ve MS SQL Server üzerinden veritabanı işlemlerini yürüten çekirdek motordur.
-*   **Acenta Düğümleri (`Acenta_A`, `Acenta_B`, `Acenta_C`):** cURL ve JSON yapıları kullanarak Merkez API ile güvenli bir şekilde iletişim kuran bağımsız önyüz ve arkayüz düğümleridir.
-*   **Bulut Altyapısı:** SSL/TLS şifrelemesi ve DDoS koruması için **Cloudflare Ters Vekil Sunucusu (Reverse Proxy)** arkasında konumlandırılmış **AWS EC2 (Ubuntu Linux)** üzerinde barındırılmaktadır.
+## 📑 Gereksinim Şartnamesi
+
+### Amacı:
+Havacılık ve seyahat endüstrisi, karmaşık günlük operasyonları yönetmek için sağlam, kesintisiz ve güvenli platformlara ihtiyaç duyar. Geleneksel yerel sistemler ölçeklenebilirlik ve senkronizasyon sorunlarıyla karşılaşmaktadır. Bu projenin amacı; biletleme bilgilerini birden fazla ayrı düğüm (node) üzerinden eşzamanlı olarak işleyebilen, alabilen ve analiz edebilen dağıtık, tarayıcı tabanlı bir rezervasyon sistemi oluşturmaktır. Ayrıca bu sistem; modern siber tehditlere karşı son derece dirençli olacak, sınırsız log kaydı tutacak ve dağıtık istemci-sunucu teknolojisi üzerinde güvenle çalışacak şekilde tasarlanmıştır.
+
+### Proje Kapsamı:
+Projenin odak noktası, yüksek oranda ölçeklenebilir bir Seyahat Yönetim Sistemi geliştirmektir. Projenin ana çıktıları şunlardır:
+*   Veritabanı senkronizasyonu için bir Merkez API motoru.
+*   Üç bağımsız Acenta Düğümü (Acenta A, B ve C).
+*   Gerçek zamanlı bulut güvenlik izleme entegrasyonu.
+*   Veri bütünlüğü için detaylı güvenlik uygulamaları.
 
 ---
 
-## 🛡️ Güvenlik ve Olay Müdahalesi (AppSec)
-Bu projede güvenlik birinci önceliktir. Sistem, özel olarak geliştirilmiş savunma mekanizmaları ve gerçek zamanlı izleme sensörleri içerir:
+## 🔭 Genel Tanım
 
-*   **AWS CloudWatch SOC Entegrasyonu:** Kritik güvenlik olayları anında yerel `security_audit.log` dosyasına yazılır ve dahili bir ajan aracılığıyla AWS CloudWatch'a iletilerek gerçek zamanlı bir Siber Güvenlik Operasyon Merkezi (SOC) panosu oluşturulur.
-*   **Brute-Force Koruması ve Hesap Kilitleme:** Ardından 5 kez hatalı giriş yapıldığında kullanıcı hesabını 15 dakika kilitleyen güvenli bir giriş mekanizması kurulmuştur. Uygulama ve veritabanı arasındaki zaman kayması (Time Drift) sorunu çözülmüştür.
-*   **XSS (Cross-Site Scripting) Sensörleri:** Standart `filter_input` temizliğinin ötesinde, aktif Regex tabanlı sensörler kullanıcı girdilerindeki zararlı HTML/JavaScript kodlarını (ör. `<script>`) tespit eder ve AWS CloudWatch'a alarm gönderir.
-*   **CSRF Token Manipülasyonu Engelleme:** Durum değiştiren istekler (bilet iptalleri gibi) kriptografik CSRF token'ları ile korunmaktadır. Zafiyet yaratan GET tabanlı durum değişiklikleri tamamen engellenmiş ve güvenli POST metotlarına kısıtlanmıştır.
-*   **Veritabanı Güvenliği:** Parametrik sorgular (`sqlsrv_query`) kullanılarak SQL Enjeksiyonu saldırıları %100 oranında engellenmiştir.
+### Ürün Perspektifi:
+Sistem; güvenli bir rezervasyon deneyimi arayan Yolcular, senkronize uçuş envanterine ihtiyaç duyan Seyahat Acentaları ve ağ sağlığı ile güvenliğini izleyen Sistem Yöneticileri hedeflenerek geliştirilmiştir.
+
+### Proje Özellikleri:
+*   **Dağıtık Mimari:** Merkez API ile cURL ve JSON üzerinden iletişim kuran bağımsız düğümler.
+*   **Gerçek Zamanlı Güvenlik İzleme (SOC):** Kritik güvenlik olayları yerel loglara yazılır ve anında **AWS CloudWatch**'a iletilir.
+*   **Karmaşık Biletleme Mantığı:** Bebek yolcuların bir yetişkin refakatçisi olmadan bilet almasını engellemek gibi karmaşık iş kurallarını yönetir.
+*   **Veritabanı Optimizasyonu:** Logaritmik arama karmaşıklıkları sağlamak için Microsoft SQL Server'da yüksek trafikli sütunlarda B-Tree indeksleme kullanımı.
+
+### Çalışma Ortamı:
+Ürün bir bulut ortamında (**AWS EC2 Ubuntu Linux**) barındırılmaktadır ve bir **Cloudflare Ters Vekil Sunucusu (Reverse Proxy)** arkasında çalışır. Tüm modern web tarayıcılarıyla uyumludur.
 
 ---
 
-## 💻 Kullanılan Teknolojiler
-*   **Arkayüz:** PHP 8.x, cURL
-*   **Önyüz:** HTML5, CSS3, JavaScript
-*   **Veritabanı:** MS SQL Server (B-Tree İndeksleme ile)
-*   **Bulut ve DevOps:** AWS EC2, AWS IAM, AWS CloudWatch, Ubuntu Linux
+## ⚙️ Sistem Özellikleri
+
+### Yönetici (Sistem Mimarı):
+Yönetici, tüm sistemi ve güvenlik duruşunu gözlemlemek ve sürdürmekten sorumludur. İşlevleri şunları içerir:
+*   Potansiyel tehditler için AWS CloudWatch SOC panelini izlemek.
+*   MS SQL Veritabanını ve indeksleme yapılarını yönetmek.
+*   Saldırı girişimlerini (ör. Brute-Force, XSS) gözlemlemek.
+
+### Seyahat Acentası Düğümü:
+Merkezi veritabanı ile etkileşime giren bağımsız platformlardır.
+*   Merkez API aracılığıyla mevcut uçuşları dinamik olarak çeker.
+*   Bilet satışlarını işler ve envanteri güvenli bir şekilde senkronize eder.
+
+### Yolcu:
+Her yolcunun sıkı güvenlik protokolleriyle korunan bireysel bir hesabı vardır. Kayıtlı her Yolcuya sunulan seçenekler şunlardır:
+*   **Güvenli Kayıt:** Girdiler temizlenir ve Regex tabanlı **XSS Sensörleri** tarafından izlenir.
+*   **Giriş (Login):** 5 başarısız denemeden sonra hesabı 15 dakika boyunca kilitleyen bir **Brute-Force (Kaba Kuvvet) koruma mekanizması** ile korunmaktadır.
+*   **Arama ve Bilet Satın Alma:** Dinamik rotalara göz atar ve bilet satın alır.
+*   **Bilet İptali:** Durum değiştiren istekler, sahte istekleri (CSRF) engellemek için kriptografik **CSRF Token'ları** ile korunmaktadır.
+
+---
+
+## 💻 Arayüzler ve Kısıtlamalar
+
+*   **Veritabanı:** MS SQL Server
+*   **Geliştirme Araçları:** Visual Studio Code, Cursor AI, Git/GitHub
+*   **Bulut ve DevOps:** AWS EC2, AWS IAM, AWS CloudWatch, Ubuntu Linux, Bash Betikleri
 *   **Ağ Güvenliği:** Cloudflare WAF, Nmap (Keşif Savunması)
-
----
-*Modern bulut altyapılarını ileri seviye uygulama güvenliği (AppSec) pratikleriyle harmanlayarak sektörel standartlarda çözümler üretmeyi hedeflemektedir.
