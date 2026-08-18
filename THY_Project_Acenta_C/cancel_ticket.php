@@ -1,14 +1,18 @@
 <?php
 // Manages ticket cancellation and Infant Passenger rules via Central API.
 
-
-// --- KURAL 3: YAPI İZOLASYONU (DB Bağlantısı Yok) ---
 require_once 'agency_config.php';
 session_start();
+
+// --- 🛡️ GÜVENLİK: CSRF TOKEN OLUŞTURMA ---
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 $pnr = $_GET['pnr'] ?? '';
 $ticketID = $_GET['ticket_id'] ?? null;
 $surname = $_GET['surname'] ?? '';
-$cancelSingleTicket = !empty($ticketID); 
+$cancelSingleTicket = !empty($ticketID);
 
 if (empty($pnr)) {
     header("Location: index.php");
@@ -59,7 +63,7 @@ if ($cancelSingleTicket) {
         exit();
     }
 
-    // Bebek ve Diğer Yolcu listelerini API verisinden ayrıştır (Eski SQL mantığının API versiyonu)
+    // Bebek ve Diğer Yolcu listelerini API verisinden ayrıştır
     foreach ($passengers as $p) {
         $isCancelled = (isset($p['TicketStatus']) && $p['TicketStatus'] === 'Cancelled');
         if (!$isCancelled && $p['TicketID'] != $ticketID) {
@@ -74,7 +78,16 @@ if ($cancelSingleTicket) {
 
 // --- AŞAMA 2: FORM GÖNDERİLDİĞİNDE İPTALİ MERKEZE BİLDİR (POST) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_cancel'])) {
-    
+
+    // --- 🛡️ KAPIDA MÜHÜR KONTROLÜ (CSRF KALKANI VE LOGLAMA) ---
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $guvenli_pnr = $_POST['pnr'] ?? ($_GET['pnr'] ?? 'Bilinmeyen_PNR');
+        $log_mesaj = "[" . date('Y-m-d H:i:s') . "] GÜVENLİK İHLALİ: CSRF Saldırısı Tespit Edildi! PNR: " . $guvenli_pnr . " | IP: " . $_SERVER['REMOTE_ADDR'] . "\n";
+        error_log($log_mesaj, 3, "/var/www/html/logs/security_audit.log");
+        die("<div style='background:black; color:red; padding:20px; font-family:monospace;'><h2><i class='fas fa-skull-crossbones'></i> SİBER GÜVENLİK İHLALİ (CSRF)</h2><p>Güvenlik kalkanı tarafından şüpheli işlem engellendi ve IP adresiniz kayıt altına alındı.</p></div>");
+    }
+    // -------------------------------------------------------------
+
     $cancelPayload = [
         "pnr" => $pnr,
         "ticket_id" => $ticketID ? $ticketID : 'ALL',
@@ -91,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_cancel'])) {
     curl_setopt($ch2, CURLOPT_POST, true);
     curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($cancelPayload));
     curl_setopt($ch2, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    
+
     $apiCevap = curl_exec($ch2);
     $api_ulasildi = !curl_errno($ch2);
     curl_close($ch2);
@@ -115,11 +128,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_cancel'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/cancel_ticket_style.css">
     <script>
-        // Show/hide companion dropdown when radio button is selected
         document.addEventListener('DOMContentLoaded', function() {
             const radioButtons = document.querySelectorAll('input[name="baby_action"]');
             const companionSelect = document.getElementById('new_companion_select');
-            
+
             if (radioButtons.length > 0 && companionSelect) {
                 radioButtons.forEach(function(radio) {
                     radio.addEventListener('change', function() {
@@ -135,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_cancel'])) {
                 });
             }
         });
-        
+
         function validateBabyAction() {
             <?php if (!empty($babyCompanionInfo) && !empty($otherPassengers)): ?>
             const babyAction = document.querySelector('input[name="baby_action"]:checked');
@@ -165,22 +177,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_cancel'])) {
     <div class="cancel-container">
         <div class="cancel-card">
             <h2 style="color:#dc3545;"><i class="fas fa-exclamation-triangle"></i> Cancel Reservation</h2>
-            
+
             <?php echo $message; ?>
-            
+
             <?php if (empty($message) || strpos($message, 'failed') !== false): ?>
                 <p><strong>PNR:</strong> <?php echo htmlspecialchars($pnr); ?></p>
-                
+
                 <?php if ($cancelSingleTicket && $ticketInfo): ?>
                     <div class="warning-box">
                         <h3 style="color:#856404; margin-top:0;"><i class="fas fa-exclamation-circle"></i> Warning</h3>
                         <p>Are you sure you want to cancel this passenger's ticket?</p>
                         <p style="font-weight:bold; margin-top:10px;">
-                            <i class="fas fa-user"></i> 
+                            <i class="fas fa-user"></i>
                             <?php echo htmlspecialchars($ticketInfo['PassengerName'] . ' ' . $ticketInfo['PassengerSurname']); ?>
                         </p>
                         <p style="font-weight:bold;">This action cannot be undone.</p>
-                        
+
                         <?php if (!empty($babyCompanionInfo)): ?>
                             <div style="background:#ffebee; border:2px solid #f44336; border-radius:6px; padding:15px; margin-top:15px; text-align:left;">
                                 <h4 style="color:#c62828; margin-top:0;"><i class="fas fa-baby"></i> Baby Passenger Alert</h4>
@@ -193,14 +205,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_cancel'])) {
                                     <?php endforeach; ?>
                                 </ul>
                                 <p style="color:#c62828; font-weight:bold; margin-bottom:10px;">Please choose an action for the baby passenger(s):</p>
-                                
+
                                 <div style="margin-top:15px;">
                                     <label style="display:block; margin-bottom:10px; cursor:pointer;">
                                         <input type="radio" name="baby_action" value="cancel_baby" required style="margin-right:8px;">
                                         <strong>Cancel baby's ticket(s) as well</strong>
                                         <span style="display:block; font-size:12px; color:#666; margin-left:24px;">The baby passenger(s) will also be cancelled.</span>
                                     </label>
-                                    
+
                                     <?php if (!empty($otherPassengers)): ?>
                                         <label style="display:block; margin-bottom:10px; cursor:pointer;">
                                             <input type="radio" name="baby_action" value="change_companion" required style="margin-right:8px;">
@@ -228,7 +240,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_cancel'])) {
                         <?php endif; ?>
                     </div>
 
+                    <!-- 🛡️ EKLENEN KISIM: CSRF TOKEN -->
                     <form method="POST" id="cancelForm">
+                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                         <input type="hidden" name="confirm_cancel" value="1">
                         <input type="hidden" name="ticket_id" value="<?php echo $ticketID; ?>">
                         <button type="submit" class="btn-cancel" onclick="return validateBabyAction();">
@@ -246,7 +260,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_cancel'])) {
                         <p style="font-size:14px; color:#666;">All tickets in this reservation will be cancelled.</p>
                     </div>
 
+                    <!-- 🛡️ EKLENEN KISIM: CSRF TOKEN -->
                     <form method="POST">
+                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                         <input type="hidden" name="confirm_cancel" value="1">
                         <button type="submit" class="btn-cancel">
                             <i class="fas fa-times-circle"></i> Yes, Cancel Reservation
