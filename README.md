@@ -16,6 +16,7 @@ The project’s focus is the development of a highly scalable Travel Management 
 *   Three independent Agency Nodes (Acenta A, B, and C).
 *   Integration of real-time cloud security monitoring.
 *   Detailed security implementations for data integrity.
+*   A secure Python-based analytics module for generating data-driven sales reports.
 
 ---
 
@@ -25,10 +26,11 @@ The project’s focus is the development of a highly scalable Travel Management 
 The system is targeted towards Travelers seeking a secure booking experience, Travel Agencies needing synchronized flight inventories, and System Administrators monitoring network health and security.
 
 ### Project Features:
-*   **Distributed Architecture:** Independent nodes communicating with a Central API via cURL and JSON.
+*   **Distributed Architecture:** Independent nodes communicating with a Central API via cURL and JSON, and highly secure API Tokens.
 *   **Real-Time Security Monitoring (SOC):** Critical security events are written to local logs and instantly forwarded to **AWS CloudWatch**.
 *   **Complex Ticketing Logic:** Handles intricate business rules, such as preventing infant passengers from booking without an adult companion.
 *   **Database Optimization:** B-Tree indexing on high-traffic columns in Microsoft SQL Server to ensure logarithmic search complexities.
+*   **Zero-Trust Analytics:** Python-based data visualization (Pandas/Matplotlib) executed via strict absolute paths and protected in locked directories. It accesses the database using the Principle of Least Privilege (PoLP) with a dedicated, read-only database user.
 
 ### Operating Environment:
 The product is hosted on a cloud environment (**AWS EC2 Ubuntu Linux**) and sits behind a **Cloudflare Reverse Proxy**. It is compatible with all modern web browsers.
@@ -42,6 +44,7 @@ The Admin is responsible for observing and maintaining the whole system and its 
 *   Monitoring the AWS CloudWatch SOC dashboard for potential threats.
 *   Managing the MS SQL Database and indexing structures.
 *   Observing intrusion attempts (e.g., Brute-Force, XSS).
+*   Generating isolated Python-based sales reports secured by API-Token authentication.
 
 ### Travel Agency Node:
 Independent platforms that interact with the central database.
@@ -61,8 +64,9 @@ Each traveler has an individual account protected by strict security protocols. 
 
 *   **Database:** MS SQL Server
 *   **Development Tools:** Visual Studio Code, Cursor AI, Git/GitHub
-*   **Cloud & DevOps:** AWS EC2, AWS IAM, AWS CloudWatch, Ubuntu Linux, Bash Scripting
-*   **Network Security:** Cloudflare WAF, Nmap (Reconnaissance Defense)
+*   **Cloud & DevOps:** AWS EC2, AWS IAM, AWS RDS, AWS CloudWatch, .env Secrets Management, Ubuntu Linux, Bash Scripting
+*   **Network Security:** Cloudflare WAF (Custom Geo-Blocking & Managed Challenges), Nmap (Reconnaissance Defense)
+*   **Data Analytics:** Python 3, Pandas, Matplotlib, Seaborn
 
 ---
 ---
@@ -84,6 +88,7 @@ Projenin odak noktası, yüksek oranda ölçeklenebilir bir Seyahat Yönetim Sis
 *   Üç bağımsız Acenta Düğümü (Acenta A, B ve C).
 *   Gerçek zamanlı bulut güvenlik izleme entegrasyonu.
 *   Veri bütünlüğü için detaylı güvenlik uygulamaları.
+*   Veriye dayalı satış raporları oluşturmak için güvenli, Python tabanlı bir analitik modülü.
 
 ---
 
@@ -93,10 +98,11 @@ Projenin odak noktası, yüksek oranda ölçeklenebilir bir Seyahat Yönetim Sis
 Sistem; güvenli bir rezervasyon deneyimi arayan Yolcular, senkronize uçuş envanterine ihtiyaç duyan Seyahat Acentaları ve ağ sağlığı ile güvenliğini izleyen Sistem Yöneticileri hedeflenerek geliştirilmiştir.
 
 ### Proje Özellikleri:
-*   **Dağıtık Mimari:** Merkez API ile cURL ve JSON üzerinden iletişim kuran bağımsız düğümler.
+*   **Dağıtık Mimari:** Merkez API ile cURL, JSON ve yüksek güvenlikli API Token'ları üzerinden iletişim kuran bağımsız düğümler.
 *   **Gerçek Zamanlı Güvenlik İzleme (SOC):** Kritik güvenlik olayları yerel loglara yazılır ve anında **AWS CloudWatch**'a iletilir.
 *   **Karmaşık Biletleme Mantığı:** Bebek yolcuların bir yetişkin refakatçisi olmadan bilet almasını engellemek gibi karmaşık iş kurallarını yönetir.
 *   **Veritabanı Optimizasyonu:** Logaritmik arama karmaşıklıkları sağlamak için Microsoft SQL Server'da yüksek trafikli sütunlarda B-Tree indeksleme kullanımı.
+*   **Sıfır Güven (Zero-Trust) Analitiği:** Yalnızca okuma yetkisine sahip özel bir veritabanı rolü (PoLP) kullanarak çalışan, kilitli dizinler ve mutlak yollarla (absolute paths) izole edilmiş Python tabanlı veri görselleştirme (Pandas/Matplotlib) altyapısı.
 
 ### Çalışma Ortamı:
 Ürün bir bulut ortamında (**AWS EC2 Ubuntu Linux**) barındırılmaktadır ve bir **Cloudflare Ters Vekil Sunucusu (Reverse Proxy)** arkasında çalışır. Tüm modern web tarayıcılarıyla uyumludur.
@@ -110,6 +116,7 @@ Yönetici, tüm sistemi ve güvenlik duruşunu gözlemlemek ve sürdürmekten so
 *   Potansiyel tehditler için AWS CloudWatch SOC panelini izlemek.
 *   MS SQL Veritabanını ve indeksleme yapılarını yönetmek.
 *   Saldırı girişimlerini (ör. Brute-Force, XSS) gözlemlemek.
+*   API-Token doğrulaması ile korunan, izole edilmiş Python satış raporlarını oluşturmak ve analiz etmek.
 
 ### Seyahat Acentası Düğümü:
 Merkezi veritabanı ile etkileşime giren bağımsız platformlardır.
@@ -129,5 +136,6 @@ Her yolcunun sıkı güvenlik protokolleriyle korunan bireysel bir hesabı vard�
 
 *   **Veritabanı:** MS SQL Server
 *   **Geliştirme Araçları:** Visual Studio Code, Cursor AI, Git/GitHub
-*   **Bulut ve DevOps:** AWS EC2, AWS IAM, AWS CloudWatch, Ubuntu Linux, Bash Betikleri
-*   **Ağ Güvenliği:** Cloudflare WAF, Nmap (Keşif Savunması)
+*   **Bulut ve DevOps:** AWS EC2, AWS IAM, AWS RDS, AWS CloudWatch, .env Secrets Management, Ubuntu Linux, Bash Betikleri
+*   **Ağ Güvenliği:** Cloudflare WAF (Özel Coğrafi Kısıtlama ve Şüpheli Trafik Doğrulaması), Nmap (Keşif Savunması)
+*   **Veri Analitiği:** Python 3, Pandas, Matplotlib, Seaborn
